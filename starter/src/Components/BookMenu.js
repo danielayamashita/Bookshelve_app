@@ -8,13 +8,17 @@ const BookMenu = ({book,currentBookshelf, onMoveBook}) => {
     }
 
     const getDefaultShelf = () => {
+        // if(currentBookshelf.length === 0){
+        //     console.log("no current BookShelf");
+        // }
+        // console.log("currentBookshelf",currentBookshelf);
         return currentBookshelf.split(' ').join('').trim();
     }
 
     
     return (
         <div className="book-shelf-changer" >
-            <select  defaultValue={getDefaultShelf} onChange={(event) => {changeBookshelf(event.target.value)}}>
+            <select  defaultValue={getDefaultShelf()} onChange={(event) => {changeBookshelf(event.target.value)}}>
                 <option value="moveTo" disabled>
                 Move to...
                 </option>

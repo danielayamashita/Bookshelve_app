@@ -11,61 +11,78 @@ function App() {
   
   const [books, setBooks] = useState([])
 
-  const [shelves, setShelves] = useState({"currentlyReading":[],
-                                          "wantToRead": [],
-                                          "read":[]})
+  const [shelfCurrentReading, setShelfCurrentReading] = useState([]);
+  
+  const [shelfWantToRead, setShelfWantToRead] = useState([]);
+  
+  const [shelfRead, setShelfRead]= useState([]);
 
-  const organizeShelf = ()=> {
-    console.log("OrganizeShelf");
-    console.log(books)
-    console.log("Hello");
-    for (let i=0; i < books.length; i++){
-      setShelves(shelves => ({
-        ...shelves, // Keep the previous state of other shelves
-        [books[i].shelf]: [...shelves.wantToRead, books[i]] // Update wantToRead with new value
-      }))
-      
-      
-    }
+  const organizeShelf = (myBooks)=> {
+    console.log("myBooks",myBooks);
+    let booksCurrentlyReading = [];
+    let booksWantToRead = [];
+    let booksRead = []
+    for (let i=0; i < myBooks.length; i++){
+      if (0 === myBooks[i].shelf.localeCompare("currentlyReading")){    
+        booksCurrentlyReading = booksCurrentlyReading.concat(myBooks[i]);
 
-    console.log(shelves);
+      }
+      else if (0 === myBooks[i].shelf.localeCompare("wantToRead")){  
+        booksWantToRead = booksWantToRead.concat(myBooks[i]);
+      }
+      else if (0 === myBooks[i].shelf.localeCompare("read")){
+
+        booksRead = booksRead.concat(myBooks[i]);
+      }           
+    }    
+    
+    setShelfCurrentReading(booksCurrentlyReading);
+    setShelfWantToRead(booksWantToRead);
+    setShelfRead(booksRead);    
 
   }
 
-  const moveBook = (book,bookshelf) => {
+  const moveBook = async (book,bookshelf) => {
 
-    BooksAPI.update(book, bookshelf); 
+    await BooksAPI.update(book, bookshelf); 
     console.log(bookshelf)
-    // organizeShelf() 
+
+    getBooks();
+    
 
   };
 
   const getBooks = async () => {
     const res = await BooksAPI.getAll();
-    setBooks(res);
 
-    
-    console.log(res);
+
+    setBooks(res);
+    organizeShelf(res);
+
   };
 
 
   useEffect(() => {
     
     getBooks(); 
-
-    organizeShelf();
-    
+   
       
   },[])
 
 
   return (
+    
     <div className="app">
+      
+
       <Routes>
         <Route 
         exact
         path="/"
-        element={<ListBooks books={books} onMoveBook={moveBook}/>}/> 
+        element={<ListBooks booksCurrentlyReading={shelfCurrentReading} 
+        booksWantToRead={shelfWantToRead} 
+        booksRead={shelfRead} 
+        onMoveBook={moveBook}/>}/> 
 
         <Route 
         path="/search"

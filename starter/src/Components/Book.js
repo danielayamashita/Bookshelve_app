@@ -1,6 +1,23 @@
 import BookMenu from "./BookMenu";
+import * as BooksAPI from "../BooksAPI";
+import { useState, useEffect} from "react";
 
-const Book = ({  bookInfo,onMoveBook }) => {
+const Book =  ({ bookInfo,onMoveBook }) => {
+
+  const [bookDetails, setBookDetails] = useState([]);
+
+  
+  const getBookShelf = () => {
+    
+    let shelf = "none";
+
+    if (bookInfo.shelf != null) {
+      shelf = bookInfo.shelf;
+    }    
+        
+    return shelf;
+
+  }
 
   
 
@@ -16,7 +33,7 @@ const Book = ({  bookInfo,onMoveBook }) => {
           }}
         ></div>
 
-        <BookMenu book={bookInfo} currentBookshelf={bookInfo.shelf} onMoveBook={onMoveBook} />
+        <BookMenu book={bookInfo} currentBookshelf={getBookShelf()} onMoveBook={onMoveBook} />
       </div>
       <div className="book-title">{bookInfo.title}</div>
       <div className="book-authors">{bookInfo.authors}</div>
