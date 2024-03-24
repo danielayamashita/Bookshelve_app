@@ -1,60 +1,78 @@
 import "./App.css";
 import { useState, useEffect} from "react";
-import {Route, Routes,useNavigate} from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import SearchBooks from "./Components/SearchBooks";
-import Bookshelf from "./Components/Bookshelf";
-import SearchNewBook from "./Components/SearchNewBook";
+
 import * as BooksAPI from "./BooksAPI";
+import ListBooks from "./Components/ListBooks";
 
 function App() {
 
-  const [showSearchPage, setShowSearchpage] = useState(false);
-
+  
   const [books, setBooks] = useState([])
 
-  const addBook = (book) => {
-    setBooks(books.concat(book))
-    console.log("addBook");
+  const [shelves, setShelves] = useState({"currentlyReading":[],
+                                          "wantToRead": [],
+                                          "read":[]})
+
+  const organizeShelf = ()=> {
+    console.log("OrganizeShelf");
+    console.log(books)
+    console.log("Hello");
+    for (let i=0; i < books.length; i++){
+      setShelves(shelves => ({
+        ...shelves, // Keep the previous state of other shelves
+        [books[i].shelf]: [...shelves.wantToRead, books[i]] // Update wantToRead with new value
+      }))
+      
+      
+    }
+
+    console.log(shelves);
+
   }
 
-  useEffect(() => {
-    const getBooks = async () => {
-      const res = await BooksAPI.getAll();
-      setBooks(res);
-      console.log(res);
-    };
-    getBooks();
+  const moveBook = (book,bookshelf) => {
+
+    BooksAPI.update(book, bookshelf); 
+    console.log(bookshelf)
+    // organizeShelf() 
+
+  };
+
+  const getBooks = async () => {
+    const res = await BooksAPI.getAll();
+    setBooks(res);
+
     
+    console.log(res);
+  };
+
+
+  useEffect(() => {
+    
+    getBooks(); 
+
+    organizeShelf();
+    
+      
   },[])
 
 
   return (
     <div className="app">
-      {showSearchPage ?
-        (
-          <SearchBooks />
-        ) :
-        (
-          <div className="list-books">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
-            </div>
-            <div className="list-books-content">
-              <div>
-                <Bookshelf typeBookshelf={"Currently Reading"} books={books}/>
+      <Routes>
+        <Route 
+        exact
+        path="/"
+        element={<ListBooks books={books} onMoveBook={moveBook}/>}/> 
 
-                <Bookshelf typeBookshelf={"Want to Read"} books={books}/>
+        <Route 
+        path="/search"
+        element={<SearchBooks onMoveBook={moveBook}/>}/>
 
-                <Bookshelf typeBookshelf={"Read"} books={books}/>
+      </Routes>
 
-                <SearchNewBook/>
-                
-              </div>
-            </div>
-          </div>
-          
-        )
-      }
     </div>
 
   );

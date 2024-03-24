@@ -1,7 +1,12 @@
+import {Link} from "react-router-dom";
+
 const SearchNewBook = () => {
   return (
     <div className="open-search">
-      <a onClick={() => {}}>Add a book</a>
+      <Link className="close-search" to="/search">
+      Add a book
+      </Link>
+      
     </div>
   );
 };

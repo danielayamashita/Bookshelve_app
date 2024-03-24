@@ -1,14 +1,8 @@
 import BookMenu from "./BookMenu";
-import { useState } from "react";
 
-const Book = ({  bookInfo }) => {
-  const [currentBookshelf, setCurrentBookshelf] = useState("Read");
+const Book = ({  bookInfo,onMoveBook }) => {
 
-  const moveBook = (bookshelf) => {
-    setCurrentBookshelf(bookshelf);
-  };
-
-
+  
 
   return (
     <div className="book">
@@ -22,7 +16,7 @@ const Book = ({  bookInfo }) => {
           }}
         ></div>
 
-        <BookMenu currentBookshelf={currentBookshelf} onMoveBook={moveBook} />
+        <BookMenu book={bookInfo} currentBookshelf={bookInfo.shelf} onMoveBook={onMoveBook} />
       </div>
       <div className="book-title">{bookInfo.title}</div>
       <div className="book-authors">{bookInfo.authors}</div>
