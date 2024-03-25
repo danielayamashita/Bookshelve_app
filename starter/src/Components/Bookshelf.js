@@ -1,5 +1,5 @@
 import Book from "./Book";
-import { useState} from "react";
+import PropTypes from "prop-types";
 
 const Bookshelf = ({ typeBookshelf,books, onMoveBook }) => { 
 
@@ -14,7 +14,7 @@ const Bookshelf = ({ typeBookshelf,books, onMoveBook }) => {
       <div key={"bookshelf_"+{typeBookshelf}} className="bookshelf-books">
         <ol className="books-grid">
           {showingBooks.map((book) => (
-            <li>              
+            <li key={`bookItem${book.id}`}>              
               <Book key={book.id} 
               bookInfo={book}
               onMoveBook={onMoveBook}/>
@@ -27,3 +27,9 @@ const Bookshelf = ({ typeBookshelf,books, onMoveBook }) => {
 };
 
 export default Bookshelf;
+
+Bookshelf.propTypes = {
+  typeBookshelf: PropTypes.string.isRequired,
+  books: PropTypes.array.isRequired,
+  onMoveBook: PropTypes.func.isRequired
+};

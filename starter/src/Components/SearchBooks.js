@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import Book from "./Book";
 import * as BooksAPI from "../BooksAPI";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+
 
 const SearchBooks = ({onMoveBook}) => {
   const [books, setBooks] = useState([]);
@@ -18,9 +20,13 @@ const SearchBooks = ({onMoveBook}) => {
 
     if (query !== "")
     {
-      const res = await BooksAPI.search(query, 10);  
+
       
-      // Update the shelf of books in my library
+      const res = await BooksAPI.search(query, 20);  
+
+      console.log(res)
+      
+      // Update the current shelf of books in my library
       for (let i=0; i < res.length; i++){
         
         for (let idBook=0; idBook < myBooks.length; idBook++){
@@ -31,15 +37,10 @@ const SearchBooks = ({onMoveBook}) => {
             break;
           }
         }
-      }
-
-      console.log(myBooks);
-
-      console.log("====================");
-      console.log(res);
+      }    
       
-
       setBooks(res);
+
     }
     
   };
@@ -49,16 +50,20 @@ const SearchBooks = ({onMoveBook}) => {
   }, []);
 
   const updateQuery = (query) => {
-    setQuery(query.trim());     
+    setQuery(query);     
     getBooks();
   };
+
+  console.log("Query:",books)
+
+
+
+  console.log("Query Books:",books)
 
   const matchBooks =
     (query === "" )
       ? []
-      : (books.length > 0) ? (books.filter((b) =>
-          b.title.toLowerCase().includes(query.toLowerCase()))) : [];
-
+      : (books.length > 0) ? books : [];
 
 
   return (
@@ -80,7 +85,7 @@ const SearchBooks = ({onMoveBook}) => {
       <div className="search-books-results">
         <ol className="books-grid">
           {matchBooks.map((book) => (
-            <li>
+            <li key={book.id}>
               <Book key={book.id} bookInfo={book} onMoveBook={onMoveBook} />
             </li>
           ))}
@@ -92,3 +97,7 @@ const SearchBooks = ({onMoveBook}) => {
 };
 
 export default SearchBooks;
+
+SearchBooks.propTypes = {
+  onMoveBook: PropTypes.func.isRequired
+};

@@ -1,4 +1,6 @@
 
+import PropTypes from "prop-types";
+
 const BookMenu = ({book,currentBookshelf, onMoveBook}) => {
 
     const changeBookshelf = (shelf) => {
@@ -35,3 +37,12 @@ const BookMenu = ({book,currentBookshelf, onMoveBook}) => {
 }
 
 export default BookMenu;
+
+
+
+BookMenu.propTypes = {
+    book: PropTypes.object.isRequired,
+    currentBookshelf: PropTypes.string.isRequired,
+    onMoveBook: PropTypes.func.isRequired
+  };
+  

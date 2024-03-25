@@ -8,9 +8,6 @@ import ListBooks from "./Components/ListBooks";
 
 function App() {
 
-  
-  const [books, setBooks] = useState([])
-
   const [shelfCurrentReading, setShelfCurrentReading] = useState([]);
   
   const [shelfWantToRead, setShelfWantToRead] = useState([]);
@@ -42,31 +39,26 @@ function App() {
 
   }
 
-  const moveBook = async (book,bookshelf) => {
+ 
 
+  const moveBook = async (book,bookshelf) => {
+    const getBooks = async () => {
+      const res = await BooksAPI.getAll();
+      organizeShelf(res);
+  
+    };
     await BooksAPI.update(book, bookshelf); 
     console.log(bookshelf)
-
     getBooks();
-    
-
   };
-
-  const getBooks = async () => {
-    const res = await BooksAPI.getAll();
-
-
-    setBooks(res);
-    organizeShelf(res);
-
-  };
-
 
   useEffect(() => {
-    
+    const getBooks = async () => {
+      const res = await BooksAPI.getAll();
+      organizeShelf(res);
+  
+    };
     getBooks(); 
-   
-      
   },[])
 
 

@@ -1,11 +1,7 @@
 import BookMenu from "./BookMenu";
-import * as BooksAPI from "../BooksAPI";
-import { useState, useEffect} from "react";
+import PropTypes from "prop-types";
 
 const Book =  ({ bookInfo,onMoveBook }) => {
-
-  const [bookDetails, setBookDetails] = useState([]);
-
   
   const getBookShelf = () => {
     
@@ -20,16 +16,31 @@ const Book =  ({ bookInfo,onMoveBook }) => {
   }
 
   
+  const getThumbnail = () => {
+
+    console.log("get thmbnail")
+    if (bookInfo.hasOwnProperty("imageLinks"))
+      if (bookInfo.imageLinks.hasOwnProperty("thumbnail"))
+      {
+        return  bookInfo.imageLinks.thumbnail
+      }
+      else
+        return ""
+    else
+      return ""
+
+
+  }
 
   return (
-    <div className="book">
+    <div className="book" key={`classname${bookInfo.id}`}>
       <div className="book-top">
         <div
           className="book-cover"
           style={{
             width: 128,
             height: 193,
-            backgroundImage: 'url("' + bookInfo.imageLinks.thumbnail+ '")',
+            backgroundImage: 'url("' + getThumbnail()+ '")',
           }}
         ></div>
 
@@ -42,3 +53,8 @@ const Book =  ({ bookInfo,onMoveBook }) => {
 };
 
 export default Book;
+
+Book.propTypes = {
+  bookInfo: PropTypes.object.isRequired,
+  onMoveBook: PropTypes.func.isRequired
+};

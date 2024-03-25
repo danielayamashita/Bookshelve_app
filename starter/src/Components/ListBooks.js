@@ -1,5 +1,7 @@
 import Bookshelf from "./Bookshelf";
 import SearchNewBook from "./SearchNewBook";
+import PropTypes from "prop-types";
+
 
 const ListBooks = ({booksCurrentlyReading,booksWantToRead,booksRead,onMoveBook}) => {
   return (
@@ -23,3 +25,10 @@ const ListBooks = ({booksCurrentlyReading,booksWantToRead,booksRead,onMoveBook})
 };
 
 export default ListBooks;
+
+ListBooks.propTypes = {
+  booksCurrentlyReading: PropTypes.array.isRequired,
+  booksWantToRead: PropTypes.array.isRequired,
+  booksRead: PropTypes.array.isRequired,
+  onMoveBook: PropTypes.func.isRequired
+};
